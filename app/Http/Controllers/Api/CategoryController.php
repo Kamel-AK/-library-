@@ -24,10 +24,17 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|max:50|unique:categories'
+            'name' => 'required|max:50|unique:categories',
+            'image' => 'nullable|image|max:2048',
         ]);
         $category = new Category();
         $category->name = $request->name;
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = uniqid('cat_') . '.' . $file->extension();
+            $file->storeAs('category-images', $filename, 'public');
+            $category->image = $filename;
+        }
         $category->save();
         return ResponseHelper::success("تمت إضافة الصنف" , $category);
     }
@@ -40,11 +47,18 @@ class CategoryController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'name' => "required|max:50|unique:categories,name,$id"
+            'name' => "required|max:50|unique:categories,name,$id",
+            'image' => 'nullable|image|max:2048',
         ]);
 
         $category = Category::find($id);
         $category->name = $request->name;
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = uniqid('cat_') . '.' . $file->extension();
+            $file->storeAs('category-images', $filename, 'public');
+            $category->image = $filename;
+        }
         $category->save();
         return ResponseHelper::success("تم تعديل الصنف" , $category);
 

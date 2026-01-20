@@ -17,4 +17,12 @@ class ResponseHelper{
             'data' => $data,
         ];
     }
+
+    static function error($message = "حدث خطأ ما", $code = 400, $data = null){
+        return response()->json([
+            'success' => false,
+            'message' => $message,
+            'data' => $data,
+        ], $code);
+    }
 }

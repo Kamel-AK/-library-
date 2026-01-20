@@ -1,9 +1,10 @@
 <?php
 
 namespace Database\Seeders;
-
-use Illuminate\Database\Seeder;
 use App\Models\Author;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+
 
 class AuthorSeeder extends Seeder
 {
@@ -12,6 +13,7 @@ class AuthorSeeder extends Seeder
      */
     public function run(): void
     {
+
         $authors = [
             ['name' => 'نجيب محفوظ'],
             ['name' => 'طه حسين'],
@@ -22,5 +24,8 @@ class AuthorSeeder extends Seeder
         foreach ($authors as $author) {
             Author::create($author);
         }
+
+        Author::factory(10)->create();
+
     }
 }

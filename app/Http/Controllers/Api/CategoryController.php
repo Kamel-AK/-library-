@@ -14,7 +14,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories =  Category::all();
+        // $categories =  Category::all();
+        // $categories =  Category::withAvg('books' , 'price')->get();
+        $categories =  Category::withCount('books')->get();
        return ResponseHelper::success(' جميع الأصناف',$categories);
     }
 
@@ -69,7 +71,17 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
+        
         $category = Category::find($id);
+
+        if (!$category) {
+            return ResponseHelper::error("الصنف غير موجود", 404);
+        }
+
+        if ($category->books()->count() > 0) {
+            return ResponseHelper::error("لا يمكن حذف الصنف لأنه مرتبط بكتب.", 400);
+        }
+
         $category->delete();
         return ResponseHelper::success("تم حذف الصنف" , $category);
     }
